@@ -92,7 +92,7 @@ def get_custom_dataset(dataset_config, tokenizer, split):
         return all_threads
             
     dataset1 = dataset1.filter(lambda x: x["message_id"] in root_ids)
-    dataset1 = datase1t.map(lambda x: {"thread": get_threads_from_root(x["message_id"])}, remove_columns=list(dataset1.features))
+    dataset1 = dataset1.map(lambda x: {"thread": get_threads_from_root(x["message_id"])}, remove_columns=list(dataset1.features))
     dataset1 = dataset1.map(lambda x: {"thread": [i for row in x["thread"] for i in row]}, batched=True)
     
     def to_dialog(thread):

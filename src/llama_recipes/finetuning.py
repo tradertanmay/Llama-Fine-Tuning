@@ -121,7 +121,8 @@ def main(**kwargs):
         model.to(torch.bfloat16)
 
     # Load the tokenizer and add special tokens
-    tokenizer = LlamaTokenizer.from_pretrained("mistralai/Mistral-7B-v0.1")
+    tokenizer = LlamaTokenizer.from_pretrained(train_config.model_name)
+
     tokenizer.add_special_tokens(
             {
 

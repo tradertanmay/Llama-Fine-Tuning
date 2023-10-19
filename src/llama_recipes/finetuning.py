@@ -22,6 +22,7 @@ from transformers import (
     default_data_collator,
 )
 from transformers.models.llama.modeling_llama import LlamaDecoderLayer
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from llama_recipes.configs import fsdp_config, train_config
 from llama_recipes.policies import AnyPrecisionAdamW, apply_fsdp_checkpointing
@@ -93,12 +94,14 @@ def main(**kwargs):
                 model = LlamaForCausalLM(llama_config)
 
     else:
-        model = LlamaForCausalLM.from_pretrained(
-            train_config.model_name,
+       
+
+        model1 = AutoModelForCausalLM.from_pretrained("Qwen/Qwen-14B", trust_remote_code=True,
+                                            
             load_in_8bit=True if train_config.quantization else None,
             device_map="auto" if train_config.quantization else None,
-            use_cache=use_cache,
-        )
+            use_cache=use_cache,)
+
     if train_config.enable_fsdp and train_config.use_fast_kernels:
         """
         For FSDP and FSDP+PEFT, setting 'use_fast_kernels' will enable

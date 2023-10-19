@@ -81,12 +81,12 @@ def main(**kwargs):
             raise Exception("latest pytorch nightly build is required to run with low_cpu_fsdp config, "
                             "please install latest nightly.")
         if rank == 0:
-            model = LlamaForCausalLM.from_pretrained(
-                train_config.model_name,
-                load_in_8bit=True if train_config.quantization else None,
-                device_map="auto" if train_config.quantization else None,
-                use_cache=use_cache,
-            )
+            model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen-14B", trust_remote_code=True,
+                                            
+            load_in_8bit=True if train_config.quantization else None,
+            device_map="auto" if train_config.quantization else None,
+            use_cache=use_cache,)
+           
         else:
             llama_config = LlamaConfig.from_pretrained(train_config.model_name)
             llama_config.use_cache = use_cache
@@ -96,7 +96,7 @@ def main(**kwargs):
     else:
        
 
-        model1 = AutoModelForCausalLM.from_pretrained("Qwen/Qwen-14B", trust_remote_code=True,
+            model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen-14B", trust_remote_code=True,
                                             
             load_in_8bit=True if train_config.quantization else None,
             device_map="auto" if train_config.quantization else None,

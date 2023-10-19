@@ -33,7 +33,7 @@ from llama_recipes.utils.config_utils import (
     generate_dataset_config,
 )
 from llama_recipes.utils.dataset_utils import get_preprocessed_dataset
-
+from transformers import AutoModelForCausalLM
 from llama_recipes.utils.train_utils import (
     train,
     freeze_transformer_layers,
@@ -80,12 +80,8 @@ def main(**kwargs):
             raise Exception("latest pytorch nightly build is required to run with low_cpu_fsdp config, "
                             "please install latest nightly.")
         if rank == 0:
-            model = LlamaForCausalLM.from_pretrained(
-                train_config.model_name,
-                load_in_8bit=True if train_config.quantization else None,
-                device_map="auto" if train_config.quantization else None,
-                use_cache=use_cache,
-            )
+            model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen-14B", device_map="auto", trust_remote_code=True)
+
         else:
             llama_config = LlamaConfig.from_pretrained(train_config.model_name)
             llama_config.use_cache = use_cache
@@ -93,12 +89,8 @@ def main(**kwargs):
                 model = LlamaForCausalLM(llama_config)
 
     else:
-        model = LlamaForCausalLM.from_pretrained(
-            train_config.model_name,
-            load_in_8bit=True if train_config.quantization else None,
-            device_map="auto" if train_config.quantization else None,
-            use_cache=use_cache,
-        )
+        model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen-14B", device_map="auto", trust_remote_code=True)
+
     if train_config.enable_fsdp and train_config.use_fast_kernels:
         """
         For FSDP and FSDP+PEFT, setting 'use_fast_kernels' will enable

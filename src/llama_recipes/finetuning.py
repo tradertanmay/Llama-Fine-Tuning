@@ -33,7 +33,7 @@ from llama_recipes.utils.config_utils import (
     generate_dataset_config,
 )
 from llama_recipes.utils.dataset_utils import get_preprocessed_dataset
-from transformers import AutoModelForCausalLM
+from transformers import AutoModelForCausalLM, AutoTokenizer
 from llama_recipes.utils.train_utils import (
     train,
     freeze_transformer_layers,
@@ -91,18 +91,7 @@ def main(**kwargs):
     else:
         model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen-14B", device_map="auto", trust_remote_code=True)
 
-    if train_config.enable_fsdp and train_config.use_fast_kernels:
-        """
-        For FSDP and FSDP+PEFT, setting 'use_fast_kernels' will enable
-        using of Flash Attention or Xformer memory-efficient kernels 
-        based on the hardware being used. This would speed up fine-tuning.
-        """
-        try:
-            from optimum.bettertransformer import BetterTransformer
-            model = BetterTransformer.transform(model) 
-        except ImportError:
-            print("Module 'optimum' not found. Please install 'optimum' it before proceeding.")
-    print_model_size(model, train_config, rank if train_config.enable_fsdp else 0)
+    
 
     # Prepare the model for int8 training if quantization is enabled
     if train_config.quantization:
@@ -113,7 +102,8 @@ def main(**kwargs):
         model.to(torch.bfloat16)
 
     # Load the tokenizer and add special tokens
-    tokenizer = LlamaTokenizer.from_pretrained(train_config.model_name)
+    tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen-14B", trust_remote_code=True)
+
     tokenizer.add_special_tokens(
             {
 

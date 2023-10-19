@@ -22,7 +22,6 @@ from transformers import (
     default_data_collator,
 )
 from transformers.models.llama.modeling_llama import LlamaDecoderLayer
-from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from llama_recipes.configs import fsdp_config, train_config
 from llama_recipes.policies import AnyPrecisionAdamW, apply_fsdp_checkpointing
@@ -81,27 +80,25 @@ def main(**kwargs):
             raise Exception("latest pytorch nightly build is required to run with low_cpu_fsdp config, "
                             "please install latest nightly.")
         if rank == 0:
-            model = AutoModelForCausalLM.from_pretrained(AutoModelForCausalLM, trust_remote_code=True,
-                                            
-            load_in_8bit=True if train_config.quantization else None,
-            device_map="auto" if train_config.quantization else None,
-            use_cache=use_cache,)
-           
+            model = LlamaForCausalLM.from_pretrained(
+                train_config.model_name,
+                load_in_8bit=True if train_config.quantization else None,
+                device_map="auto" if train_config.quantization else None,
+                use_cache=use_cache,
+            )
         else:
             llama_config = LlamaConfig.from_pretrained(train_config.model_name)
             llama_config.use_cache = use_cache
             with torch.device("meta"):
-                model = AutoModelForCausalLM(llama_config)
+                model = LlamaForCausalLM(llama_config)
 
     else:
-       
-
-            model = AutoModelForCausalLM.from_pretrained( train_config, trust_remote_code=True,
-                                            
+        model = LlamaForCausalLM.from_pretrained(
+            train_config.model_name,
             load_in_8bit=True if train_config.quantization else None,
             device_map="auto" if train_config.quantization else None,
-            use_cache=use_cache,)
-
+            use_cache=use_cache,
+        )
     if train_config.enable_fsdp and train_config.use_fast_kernels:
         """
         For FSDP and FSDP+PEFT, setting 'use_fast_kernels' will enable
@@ -125,7 +122,6 @@ def main(**kwargs):
 
     # Load the tokenizer and add special tokens
     tokenizer = LlamaTokenizer.from_pretrained(train_config.model_name)
-
     tokenizer.add_special_tokens(
             {
 

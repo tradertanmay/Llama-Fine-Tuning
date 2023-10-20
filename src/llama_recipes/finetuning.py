@@ -80,7 +80,7 @@ def main(**kwargs):
             raise Exception("latest pytorch nightly build is required to run with low_cpu_fsdp config, "
                             "please install latest nightly.")
         if rank == 0:
-            model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen-14B", device_map="auto", trust_remote_code=True)
+            model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen-7B", device_map="auto", trust_remote_code=True)
 
         else:
             llama_config = LlamaConfig.from_pretrained(train_config.model_name)
@@ -89,7 +89,7 @@ def main(**kwargs):
                 model = LlamaForCausalLM(llama_config)
 
     else:
-        model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen-14B", device_map="auto", trust_remote_code=True)
+        model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen-7B", device_map="auto", trust_remote_code=True)
 
     
 
@@ -102,7 +102,7 @@ def main(**kwargs):
         model.to(torch.bfloat16)
 
     # Load the tokenizer and add special tokens
-    tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen-14B", trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen-7B", trust_remote_code=True)
 
     tokenizer.add_special_tokens(
             {

@@ -41,8 +41,16 @@ class ConcatDataset(Dataset):
                 buffer["input_ids"] = buffer["input_ids"][self.chunk_size:]
                 buffer["attention_mask"] = buffer["attention_mask"][self.chunk_size:]
                 buffer["labels"] = buffer["labels"][self.chunk_size:]
+                print("Buffer Shapes - Input IDs:", buffer["input_ids"])
+                print("Buffer Shapes - Attention Mask:", buffer["attention_mask"])
+                print("Buffer Shapes - Labels:", buffer["labels"])
+
 
     def __getitem__(self, idx):
+        print("Buffer Shapes - Input IDs:", buffer["input_ids"])
+        print("Buffer Shapes - Attention Mask:", buffer["attention_mask"])
+        print("Buffer Shapes - Labels:", buffer["labels"])
+
         return self.samples[idx]
 
     def __len__(self):

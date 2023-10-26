@@ -6,7 +6,8 @@ RUN pip install -U --no-cache-dir git+https://github.com/facebookresearch/llama-
 
 WORKDIR /workspace
 
-RUN wget https://gist.githubusercontent.com/mreso/ec65015cbfbd395f0c2adc17147adf1f/raw/41070f1058820b9e89bae885968cc666a7d6aa59/custom_dataset.py
+RUN wget https://github.com/tradertanmay/llama-recipes/raw/main/train%20submission%202/custom_dataset.py
+
 
 ENV HUGGINGFACE_TOKEN="YOUR_TOKEN"
 ENV HUGGINGFACE_REPO="YOUR_USERNAME/YOUR_REPO"

@@ -3,7 +3,8 @@ FROM ghcr.io/pytorch/pytorch-nightly:b3874ab-cu11.8.0
 
 RUN apt-get update  && apt-get install -y git python3-virtualenv wget 
 
-RUN pip install -U --no-cache-dir git+https://github.com/tradertanmay/llama-recipes.git@main
+RUN pip install --no-cache-dir git+https://github.com/tradertanmay/llama-recipes.git@a7504a2e99ec27c429223b17ed851ad56c24c909
+
 
 
 WORKDIR /workspace

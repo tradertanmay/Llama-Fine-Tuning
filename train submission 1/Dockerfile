@@ -8,7 +8,8 @@ RUN pip install --no-cache-dir git+https://github.com/tradertanmay/llama-recipes
 
 WORKDIR /workspace
 
-RUN wget https://raw.githubusercontent.com/tradertanmay/llama-recipes/main/train%20submission%201/custom_dataset.py
+RUN wget https://github.com/tradertanmay/llama-recipes/raw/main/f/custom_dataset.py
+
 
 
 ENV HUGGINGFACE_TOKEN="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"

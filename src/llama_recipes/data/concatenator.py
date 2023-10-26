@@ -7,11 +7,13 @@ from itertools import chain
 from torch.utils.data import Dataset
 
 import torch.nn.functional
+from torch.utils.data import Dataset
+import torch
+
 class ConcatDataset(Dataset):
     def __init__(self, dataset, chunk_size=4096):
         self.dataset = dataset
         self.chunk_size = chunk_size
-
         self.samples = []
 
         buffer = {
@@ -31,7 +33,7 @@ class ConcatDataset(Dataset):
                 chunk = {
                     "input_ids": buffer["input_ids"][:self.chunk_size],
                     "attention_mask": buffer["attention_mask"][:self.chunk_size],
-                    "labels": torch.nn.functional.one_hot(torch.tensor(buffer["labels"][:self.chunk_size]), num_classes=num_classes).tolist(),
+                    "labels": torch.tensor(buffer["labels"][:self.chunk_size]),  # Integer labels directly
                 }
 
                 self.samples.append(chunk)

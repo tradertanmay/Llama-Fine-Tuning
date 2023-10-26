@@ -6,7 +6,7 @@ from itertools import chain
 
 from torch.utils.data import Dataset
 
-
+import torch.nn.functional
 class ConcatDataset(Dataset):
     def __init__(self, dataset, chunk_size=4096):
         self.dataset = dataset
@@ -45,4 +45,3 @@ class ConcatDataset(Dataset):
 
     def __len__(self):
         return len(self.samples)
-

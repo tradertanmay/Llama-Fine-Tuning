@@ -7,11 +7,11 @@ def main():
     login(token=os.environ["HUGGINGFACE_TOKEN"])
     
     kwargs = {
-        "model_name": "meta-llama/Llama-2-7b-hf",
+        "model_name": "mistralai/Mistral-7B-v0.1",
         "use_peft": True,
         "peft_method": "lora",
         "quantization": True,
-        "batch_size_training": 2,
+        "batch_size_training": 4,
         "dataset": "custom_dataset",
         "custom_dataset.file": "./custom_dataset.py",
         "output_dir": "./output_dir",

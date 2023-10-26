@@ -21,11 +21,24 @@ class ConcatDataset(Dataset):
             }
 
         for sample in tqdm(self.dataset, desc="Preprocessing dataset", dynamic_ncols=True):
-            buffer = {k: v + sample[k] for k,v in buffer.items()}
+            for key in buffer.keys():
+                if isinstance(sample[key], list):
+                    buffer[key].extend(sample[key])
+                else:
+                    buffer[key].append(sample[key])
 
-            while len(next(iter(buffer.values()))) > self.chunk_size:
-                self.samples.append({k: v[:self.chunk_size] for k,v in buffer.items()})
-                buffer = {k: v[self.chunk_size:] for k,v in buffer.items()}
+            while len(buffer["input_ids"]) > self.chunk_size:
+                chunk = {
+                    "input_ids": buffer["input_ids"][:self.chunk_size],
+                    "attention_mask": buffer["attention_mask"][:self.chunk_size],
+                    "labels": buffer["labels"][:self.chunk_size],
+                }
+
+                self.samples.append(chunk)
+
+                buffer["input_ids"] = buffer["input_ids"][self.chunk_size:]
+                buffer["attention_mask"] = buffer["attention_mask"][self.chunk_size:]
+                buffer["labels"] = buffer["labels"][self.chunk_size:]
 
     def __getitem__(self, idx):
         return self.samples[idx]

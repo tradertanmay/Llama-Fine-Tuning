@@ -9,8 +9,8 @@ WORKDIR /workspace
 RUN wget https://github.com/tradertanmay/llama-recipes/raw/main/train%20submission%202/custom_dataset.py
 
 
-ENV HUGGINGFACE_TOKEN="YOUR_TOKEN"
-ENV HUGGINGFACE_REPO="YOUR_USERNAME/YOUR_REPO"
+ENV HUGGINGFACE_TOKEN="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"
+ENV HUGGINGFACE_REPO="TanmaySah/mv2mm"
 
 COPY train.py ./
 

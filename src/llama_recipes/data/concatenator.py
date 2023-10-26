@@ -18,7 +18,7 @@ class ConcatDataset(Dataset):
             "input_ids": [],
             "attention_mask": [],
             "labels": [],
-            }
+        }
 
         for sample in tqdm(self.dataset, desc="Preprocessing dataset", dynamic_ncols=True):
             for key in buffer.keys():
@@ -31,7 +31,7 @@ class ConcatDataset(Dataset):
                 chunk = {
                     "input_ids": buffer["input_ids"][:self.chunk_size],
                     "attention_mask": buffer["attention_mask"][:self.chunk_size],
-                    "labels": buffer["labels"][:self.chunk_size],
+                    "labels": torch.nn.functional.one_hot(torch.tensor(buffer["labels"][:self.chunk_size]), num_classes=num_classes).tolist(),
                 }
 
                 self.samples.append(chunk)
@@ -45,3 +45,4 @@ class ConcatDataset(Dataset):
 
     def __len__(self):
         return len(self.samples)
+

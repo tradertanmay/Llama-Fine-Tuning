@@ -28,7 +28,7 @@ logging.basicConfig(level=logging.INFO)
 login(token=os.environ["HUGGINGFACE_TOKEN"])
 
 model = LlamaForCausalLM.from_pretrained(
-    'meta-llama/Llama-2-13b-hf',
+    'mistralai/Mistral-7B-v0.1',
     return_dict=True,
     torch_dtype=torch.float16,
     device_map="cuda"
@@ -37,7 +37,7 @@ model = load_peft_model(model, os.environ["HUGGINGFACE_REPO"])
 
 model.eval()
 
-tokenizer = LlamaTokenizer.from_pretrained('meta-llama/Llama-2-13b-hf')
+tokenizer = LlamaTokenizer.from_pretrained('mistralai/Mistral-7B-v0.1')
 
 LLAMA2_CONTEXT_LENGTH = 4096
 

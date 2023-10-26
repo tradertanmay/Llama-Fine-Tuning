@@ -30,7 +30,7 @@ class DataCollatorForMultipleChoice:
     Data collator that will dynamically pad the inputs for multiple choice received.
     """
 
-    tokenizer: tokenizer
+    tokenizer: PreTrainedTokenizerBase
     padding: Union[bool, str, PaddingStrategy] = True
     max_length: Optional[int] = None
     pad_to_multiple_of: Optional[int] = None

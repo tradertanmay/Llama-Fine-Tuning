@@ -10,6 +10,9 @@ import torch.nn.functional
 from torch.utils.data import Dataset
 import torch
 
+from torch.utils.data import Dataset
+from tqdm import tqdm
+
 class ConcatDataset(Dataset):
     def __init__(self, dataset, chunk_size=4096):
         self.dataset = dataset
@@ -23,34 +26,32 @@ class ConcatDataset(Dataset):
         }
 
         for sample in tqdm(self.dataset, desc="Preprocessing dataset", dynamic_ncols=True):
-            for key in buffer.keys():
-                if isinstance(sample[key], list):
-                    buffer[key].extend(sample[key])
-                else:
-                    buffer[key].append(sample[key])
+            input_ids = sample["input_ids"]
+            attention_mask = sample["attention_mask"]
+            labels = sample["labels"]
 
-            while len(buffer["input_ids"]) > self.chunk_size:
+            # Extend the buffer lists with the current sample data
+            buffer["input_ids"].extend(input_ids)
+            buffer["attention_mask"].extend(attention_mask)
+            buffer["labels"].append(labels)  # Assuming labels is a single integer for each sample
+
+            # Check if the buffer size exceeds the chunk size, then create a chunk
+            while len(buffer["input_ids"]) >= self.chunk_size:
                 chunk = {
                     "input_ids": buffer["input_ids"][:self.chunk_size],
                     "attention_mask": buffer["attention_mask"][:self.chunk_size],
-                    "labels": torch.tensor(buffer["labels"][:self.chunk_size]),  # Integer labels directly
+                    "labels": buffer["labels"][:self.chunk_size],
                 }
 
+                # Append the chunk to samples
                 self.samples.append(chunk)
 
+                # Remove processed data from buffer
                 buffer["input_ids"] = buffer["input_ids"][self.chunk_size:]
                 buffer["attention_mask"] = buffer["attention_mask"][self.chunk_size:]
                 buffer["labels"] = buffer["labels"][self.chunk_size:]
-                print("Buffer Shapes - Input IDs:", buffer["input_ids"])
-                print("Buffer Shapes - Attention Mask:", buffer["attention_mask"])
-                print("Buffer Shapes - Labels:", buffer["labels"])
-
 
     def __getitem__(self, idx):
-        print("Buffer Shapes - Input IDs:", buffer["input_ids"])
-        print("Buffer Shapes - Attention Mask:", buffer["attention_mask"])
-        print("Buffer Shapes - Labels:", buffer["labels"])
-
         return self.samples[idx]
 
     def __len__(self):

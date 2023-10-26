@@ -23,7 +23,7 @@ from itertools import chain
 
 
 
-def get_custom_dataset( dataset_config,tokenizer, split=split):
+def get_custom_dataset( dataset_config,tokenizer, split):
     
 
     # Load and tokenize the first dataset

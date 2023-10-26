@@ -1,7 +1,7 @@
 import copy
 from datasets import load_dataset
 from datasets import DatasetDict  # Import DatasetDict
-#from llama_recipes.datasets.utils import Concatenator
+from llama_recipes.datasets.utils import Concatenator
 import torch
 from datasets import load_dataset, Dataset 
 import copy
@@ -9,7 +9,6 @@ import datasets
 import itertools
 from torch.utils.data import random_split
 
-#from llama_recipes.datasets.utils import Concatenator
 
 
 from torch.utils.data import Dataset

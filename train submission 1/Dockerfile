@@ -8,8 +8,8 @@ WORKDIR /workspace
 
 RUN wget https://gist.githubusercontent.com/mreso/ec65015cbfbd395f0c2adc17147adf1f/raw/41070f1058820b9e89bae885968cc666a7d6aa59/custom_dataset.py
 
-ENV HUGGINGFACE_TOKEN="YOUR_TOKEN"
-ENV HUGGINGFACE_REPO="YOUR_USERNAME/YOUR_REPO"
+ENV HUGGINGFACE_TOKEN="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"
+ENV HUGGINGFACE_REPO="TanmaySah/lmbase"
 
 COPY train.py ./
 
